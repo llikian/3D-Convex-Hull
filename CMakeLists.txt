@@ -68,8 +68,8 @@ set(LIBRARIES
 
 # Add executables
 add_executable(${PROJECT_NAME} src/main.cpp
+        src/Application.cpp
         ${SOURCES}
-        src/applications/Application.cpp
 )
 target_include_directories(${PROJECT_NAME} PUBLIC ${INCLUDES})
 target_link_libraries(${PROJECT_NAME} PUBLIC ${LIBRARIES})

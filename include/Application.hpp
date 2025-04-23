@@ -6,11 +6,8 @@
 #pragma once
 
 #include "engine/ApplicationBase.hpp"
-
 #include "engine/Camera.hpp"
-#include "engine/Light.hpp"
 #include "engine/Shader.hpp"
-#include "engine/Texture.hpp"
 #include "maths/mat4.hpp"
 
 /**
@@ -68,62 +65,29 @@ private:
     /**
      * @brief Initializes all the uniforms to their correct default values.
      */
-    void initUniforms();
+    void initUniforms() const;
 
     /**
      * @brief Updates all the uniforms.
      */
-    void updateUniforms();
+    void updateUniforms() const;
 
     /**
      * @brief Calculates the MVP (Matrix-View-Projection) Matrix and sends it to the shader.
      * @param model The new value of the model matrix. It is a product of translation, scale
      * and rotation matrices used to apply transforms on the scene's objects.
      */
-    void calculateMVP(const mat4& model);
-
-    /**
-     * @brief Binds a texture to a specific texture unit.
-     * @param texture The texture to bind.
-     * @param texUnit The texture unit to bind to.
-     */
-    void bindTexture(const Texture& texture, unsigned int texUnit);
-
-    /**
-     * @brief Binds a texture class to a specific texture unit.
-     * @param textureID The texture's id.
-     * @param texUnit The texture unit to bind to.
-     */
-    void bindTexture(unsigned int textureID, unsigned int texUnit);
-
-    /**
-     * @brief Binds a texture to the active texture unit.
-     * @param texture The texture to bind.
-     */
-    void bindTexture(const Texture& texture);
-
-    /**
-     * @brief Binds a texture to the active texture unit.
-     * @param textureID The texture's id.
-     */
-    void bindTexture(unsigned int textureID);
+    void calculateMVP(const mat4& model) const;
 
     /* ---- Variables & Constants ---- */
     bool wireframe;         ///< Whether to display in wireframe mode.
     bool cullface;          ///< Whether face culling is activated.
     bool cursorVisible;     ///< Whether the cursor is currently visible.
     bool areAxesDrawn;      ///< Whether the axes are drawn.
-    bool isGridDrawn;       ///< Whether the grid is drawn.
-    bool isGroundDrawn;     ///< Whether the ground is drawn.
-    bool hasGlobalLighting; ///< Whether the scene has global lighting.
 
     Shader* shader; ///< The default shader program.
 
     mat4 projection; ///< The projection matrix.
 
     Camera camera; ///< A first person camera to move around the scene.
-
-    DirectionalLight directionalLight;   ///< Light used for global illumination.
-    FlashLight flashlight;               ///< A flashlight.
-    std::vector<PointLight> pointLights; ///< Point lights used to light up smaller areas.
 };
