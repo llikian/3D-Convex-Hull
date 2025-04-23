@@ -87,6 +87,22 @@ struct vec3 {
      */
     vec3& operator /=(float scalar);
 
+    /**
+     * @brief Creates a random vec3 with all components in the same bounds.
+     * @param min The minimum value a component can have.
+     * @param max The minimum value a component can have.
+     * @return A random vec3.
+     */
+    static vec3 random(float min, float max);
+
+    /**
+     * @brief Creates a random vec3 with specific bounds for each component.
+     * @param min The minimum value for each component.
+     * @param max The minimum value for each component.
+     * @return A random vec3.
+     */
+    static vec3 random(const vec3& min, const vec3& max);
+
     float x; ///< The x component of the vec3.
     float y; ///< The y component of the vec3.
     float z; ///< The z component of the vec3.

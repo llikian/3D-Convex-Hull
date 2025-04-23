@@ -8,6 +8,8 @@
 #include <cmath>
 #include "maths/geometry.hpp"
 #include "maths/transforms.hpp"
+#include "mesh/Mesh.hpp"
+#include "mesh/meshes.hpp"
 
 Application::Application()
     : ApplicationBase("OpenGL Engine"),
@@ -15,7 +17,6 @@ Application::Application()
       shader(nullptr),
       projection(perspective(M_PI_4f, window.getRatio(), 0.1f, 100.0f)),
       camera(Point(0.0f, 2.0f, 5.0f)) {
-
     /* ---- Repeatable Keys ---- */
     repeatableKeys.emplace(GLFW_KEY_W, false);
     repeatableKeys.emplace(GLFW_KEY_S, false);
@@ -28,7 +29,7 @@ Application::Application()
     setCallbacks<Application>(window, true, true, true, false, true, false);
 
     /* ---- Shaders ---- */
-    std::string paths[2]{"shaders/application/default.vert", "shaders/application/default.frag"};
+    std::string paths[2]{ "shaders/application/default.vert", "shaders/application/default.frag" };
     shader = new Shader(paths, 2, "Default");
     initUniforms();
 }
@@ -38,6 +39,18 @@ Application::~Application() {
 }
 
 void Application::run() {
+    std::vector<vec3> points;
+    Mesh pointsMesh(GL_POINTS);
+    Mesh wireframeCube = Meshes::wireframeCube();
+    float boundingCubeSize = 20.0f;
+
+    for(uint i = 0 ; i < 100 ; ++i) {
+        points.push_back(vec3::random(-boundingCubeSize / 2.0f, boundingCubeSize / 2.0f));
+        pointsMesh.addPosition(points.back());
+    }
+
+    glPointSize(5.0f);
+
     /* ---- Main Loop ---- */
     while(!glfwWindowShouldClose(window)) {
         handleEvents();
@@ -49,8 +62,12 @@ void Application::run() {
         updateUniforms();
 
         calculateMVP(mat4(1.0f));
+        shader->setUniform("color", vec3(1.0f));
+        pointsMesh.draw();
 
-
+        calculateMVP(scale(boundingCubeSize));
+        shader->setUniform("color", vec3(0.0f, 1.0f, 0.788f));
+        wireframeCube.draw();
 
         glfwSwapBuffers(window);
     }
@@ -120,9 +137,6 @@ void Application::initUniforms() const {
 
 void Application::updateUniforms() const {
     shader->setUniform("cameraPos", camera.getPosition());
-
-    shader->setUniform("spotlight.position", camera.getPosition());
-    shader->setUniform("spotlight.direction", camera.getDirection());
 }
 
 void Application::calculateMVP(const mat4& model) const {
