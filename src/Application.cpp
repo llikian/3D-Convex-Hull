@@ -6,6 +6,7 @@
 #include "Application.hpp"
 
 #include <cmath>
+#include "Quickhull.hpp"
 #include "maths/geometry.hpp"
 #include "maths/transforms.hpp"
 #include "mesh/Mesh.hpp"
@@ -39,15 +40,10 @@ Application::~Application() {
 }
 
 void Application::run() {
-    std::vector<vec3> points;
-    Mesh pointsMesh(GL_POINTS);
     Mesh wireframeCube = Meshes::wireframeCube();
     float boundingCubeSize = 20.0f;
 
-    for(uint i = 0 ; i < 100 ; ++i) {
-        points.push_back(vec3::random(-boundingCubeSize / 2.0f, boundingCubeSize / 2.0f));
-        pointsMesh.addPosition(points.back());
-    }
+    Quickhull hull(100, -boundingCubeSize / 2.0f, boundingCubeSize / 2.0f);
 
     glPointSize(5.0f);
 
@@ -63,7 +59,7 @@ void Application::run() {
 
         calculateMVP(mat4(1.0f));
         shader->setUniform("color", vec3(1.0f));
-        pointsMesh.draw();
+        hull.draw();
 
         calculateMVP(scale(boundingCubeSize));
         shader->setUniform("color", vec3(0.0f, 1.0f, 0.788f));
@@ -136,7 +132,7 @@ void Application::initUniforms() const {
 }
 
 void Application::updateUniforms() const {
-    shader->setUniform("cameraPos", camera.getPosition());
+
 }
 
 void Application::calculateMVP(const mat4& model) const {

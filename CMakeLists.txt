@@ -69,6 +69,7 @@ set(LIBRARIES
 # Add executables
 add_executable(${PROJECT_NAME} src/main.cpp
         src/Application.cpp
+        src/Quickhull.cpp
         ${SOURCES}
 )
 target_include_directories(${PROJECT_NAME} PUBLIC ${INCLUDES})
