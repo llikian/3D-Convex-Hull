@@ -8,6 +8,7 @@
 #include <vector>
 #include <glad/glad.h>
 #include <sys/types.h>
+#include "engine/Shader.hpp"
 #include "maths/vec3.hpp"
 #include "mesh/Mesh.hpp"
 
@@ -24,10 +25,14 @@ struct Quickhull {
 
     Quickhull(uint pointsAmount, float boundsMin, float boundsMax);
 
-    void draw() {
-        pointsMesh.draw();
-    }
+    void create(uint pointsAmount, float boundsMin, float boundsMax);
+
+    void draw(Shader* shader);
 
     std::vector<vec3> points;
     Mesh pointsMesh;
+    Mesh linesMesh;
+    Mesh mesh;
+
+    std::vector<std::vector<uint>> pointsAboveFace;
 };

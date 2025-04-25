@@ -75,6 +75,13 @@ void Mesh::draw() {
     }
 }
 
+void Mesh::clear() {
+    shouldBind = true;
+    attributes= 0b00000001;
+    data.clear();
+    indices.clear();
+}
+
 void Mesh::addPosition(float x, float y, float z) {
     data.push_back(x);
     data.push_back(y);
@@ -135,6 +142,11 @@ void Mesh::addColor(const Color& color) {
 
 void Mesh::addIndex(unsigned int index) {
     indices.push_back(index);
+}
+
+void Mesh::addLine(unsigned int begin, unsigned int end) {
+    indices.push_back(begin);
+    indices.push_back(end);
 }
 
 void Mesh::addTriangle(unsigned int top, unsigned int left, unsigned int right) {

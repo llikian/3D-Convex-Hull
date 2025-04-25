@@ -5,10 +5,12 @@
 
 #pragma once
 
+#include "Quickhull.hpp"
 #include "engine/ApplicationBase.hpp"
 #include "engine/Camera.hpp"
 #include "engine/Shader.hpp"
 #include "maths/mat4.hpp"
+#include "mesh/Mesh.hpp"
 
 /**
  * @class Application
@@ -90,4 +92,10 @@ private:
     mat4 projection; ///< The projection matrix.
 
     Camera camera; ///< A first person camera to move around the scene.
+
+    Mesh wireframeCube;
+    float boundingCubeSize;
+
+    uint pointsAmount;
+    Quickhull hull;
 };

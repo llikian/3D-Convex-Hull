@@ -50,6 +50,11 @@ public:
     void draw();
 
     /**
+     * @brief Empties every data array.
+     */
+    void clear();
+
+    /**
      * @brief Adds a position to the data.
      * @param x, y, z The point's coordinates.
      */
@@ -102,6 +107,13 @@ public:
      * @param index The index.
      */
     void addIndex(unsigned int index);
+
+    /**
+     * @brief Adds a triangle to the indices.
+     * @param begin The index of the beginning point of the line.
+     * @param end The index of the end point of the line.
+     */
+    void addLine(unsigned int begin, unsigned int end);
 
     /**
      * @brief Adds a triangle to the indices.

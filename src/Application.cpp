@@ -6,10 +6,8 @@
 #include "Application.hpp"
 
 #include <cmath>
-#include "Quickhull.hpp"
 #include "maths/geometry.hpp"
 #include "maths/transforms.hpp"
-#include "mesh/Mesh.hpp"
 #include "mesh/meshes.hpp"
 
 Application::Application()
@@ -17,7 +15,9 @@ Application::Application()
       wireframe(false), cullface(true), cursorVisible(false), areAxesDrawn(false),
       shader(nullptr),
       projection(perspective(M_PI_4f, window.getRatio(), 0.1f, 100.0f)),
-      camera(Point(0.0f, 2.0f, 5.0f)) {
+      camera(Point(0.0f, 2.0f, 5.0f)),
+      wireframeCube(Meshes::wireframeCube()), boundingCubeSize(20.0f),
+      pointsAmount(100), hull(pointsAmount, -boundingCubeSize / 2.0f, boundingCubeSize / 2.0f) {
     /* ---- Repeatable Keys ---- */
     repeatableKeys.emplace(GLFW_KEY_W, false);
     repeatableKeys.emplace(GLFW_KEY_S, false);
@@ -40,11 +40,8 @@ Application::~Application() {
 }
 
 void Application::run() {
-    Mesh wireframeCube = Meshes::wireframeCube();
-    float boundingCubeSize = 20.0f;
-
-    Quickhull hull(100, -boundingCubeSize / 2.0f, boundingCubeSize / 2.0f);
-
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
     glPointSize(5.0f);
 
     /* ---- Main Loop ---- */
@@ -58,12 +55,14 @@ void Application::run() {
         updateUniforms();
 
         calculateMVP(mat4(1.0f));
-        shader->setUniform("color", vec3(1.0f));
-        hull.draw();
+
+        hull.draw(shader);
 
         calculateMVP(scale(boundingCubeSize));
-        shader->setUniform("color", vec3(0.0f, 1.0f, 0.788f));
+        shader->setUniform("useUniformColor", true);
+        shader->setUniform("uColor", vec3(0.0f, 1.0f, 0.788f));
         wireframeCube.draw();
+        shader->setUniform("useUniformColor", false);
 
         glfwSwapBuffers(window);
     }
@@ -115,6 +114,9 @@ void Application::handleKeyEvent(int key) {
         case GLFW_KEY_D:
             camera.move(CameraControls::right, delta);
             break;
+        case GLFW_KEY_R:
+            hull.create(pointsAmount, -boundingCubeSize / 2.0f, boundingCubeSize / 2.0f);
+            break;
         case GLFW_KEY_SPACE:
             camera.move(CameraControls::upward, delta);
             break;
@@ -131,9 +133,7 @@ void Application::initUniforms() const {
     calculateMVP(mat4(1.0f));
 }
 
-void Application::updateUniforms() const {
-
-}
+void Application::updateUniforms() const { }
 
 void Application::calculateMVP(const mat4& model) const {
     shader->setUniform("mvp", camera.getVPmatrix(projection) * model);

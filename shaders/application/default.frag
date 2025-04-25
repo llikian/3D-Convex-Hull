@@ -6,11 +6,18 @@
 #version 460 core
 
 in vec3 position;
+in vec3 color;
 
 out vec4 fragColor;
 
-uniform vec3 color;
+uniform bool useUniformColor;
+uniform vec3 uColor;
+uniform float alpha;
 
 void main() {
-    fragColor = vec4(color, 1.0f);
+    if(useUniformColor) {
+        fragColor = vec4(uColor, alpha);
+    } else {
+        fragColor = vec4(color, alpha);
+    }
 }
