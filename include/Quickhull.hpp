@@ -33,6 +33,4 @@ struct Quickhull {
     Mesh pointsMesh;
     Mesh linesMesh;
     Mesh mesh;
-
-    std::vector<std::vector<uint>> pointsAboveFace;
 };

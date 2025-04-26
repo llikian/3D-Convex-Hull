@@ -137,5 +137,5 @@ void Application::updateUniforms() const { }
 
 void Application::calculateMVP(const mat4& model) const {
     shader->setUniform("mvp", camera.getVPmatrix(projection) * model);
-    shader->setUniform("model", model);
+    // shader->setUniform("model", model);
 }
