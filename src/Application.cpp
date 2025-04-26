@@ -11,7 +11,7 @@
 #include "mesh/meshes.hpp"
 
 Application::Application()
-    : ApplicationBase("OpenGL Engine"),
+    : ApplicationBase("3D Convex Hull"),
       wireframe(false), cullface(true), cursorVisible(false), areAxesDrawn(false),
       shader(nullptr),
       projection(perspective(M_PI_4f, window.getRatio(), 0.1f, 100.0f)),
